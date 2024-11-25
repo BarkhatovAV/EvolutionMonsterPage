@@ -1,84 +1,100 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-us">
 
 <head>
   <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>MonsterEvolution</title>
+  <link rel="stylesheet" href="TemplateData/style.css">
 
-  <script type="text/javascript" >
-    window.yandexMetricaCounterId = parseInt(92785603);
+  <script>
+    const overlayBackgroundColor = "";
+    const progressBarFillColor = "";
+    const progressBarBackgroundColor = "";
+    const progressBarBorderColor = "";
   </script>
 
-  <!-- Yandex.Metrika counter -->
-  <script type="text/javascript" >
-    (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-    m[i].l=1*new Date();
-    for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-    k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-    (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-
-    ym(window.yandexMetricaCounterId, "init", {
-        clickmap:true,
-        trackLinks:true,
-        accurateTrackBounce:true
-    });
-  </script>
-  <noscript><div><img src="https://mc.yandex.ru/watch/92785603" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-  <!-- /Yandex.Metrika counter -->
-
-  <script type="text/javascript" >
-    ym(window.yandexMetricaCounterId,'reachGoal','pageOpen');
-
-    addEventListener('DOMContentLoaded', (event) => {
-      const pageLoadTime = performance.timing.domContentLoadedEventStart - performance.timing.navigationStart;
-      ym(window.yandexMetricaCounterId,'reachGoal','pageLoad', { pageLoadTime: pageLoadTime / 1000 });
-    });
-  </script>
 </head>
 
-<body style="margin: 0px; overflow: hidden;" oncontextmenu="return false;">
-  <canvas id="unity-canvas"
-    style="position: fixed; width: 100%; height: 100%; background: #231F20">
-  </canvas>
+<body class="dark">
+  <div id="unity-container" class="unity-desktop">
+    <canvas id="unity-canvas"></canvas>
+  </div>
+  <div id="loading-cover" style="display:none;">
+    <div id="unity-loading-bar">
+      <div id="unity-logo"><img src="logo.png"></div>
+      <div id="unity-progress-bar-empty" style="display: none;">
+        <div id="unity-progress-bar-full"></div>
+      </div>
+      <div class="spinner"></div>
+    </div>
+  </div>
 
-  <div id="progress-bar" style="position: absolute; left: 0%; right: 100%; top: 49%; bottom: 49%; background-color: white;"></div>
-
-  <script src="Build/b7Anal.loader.js"></script>
   <script>
-    const settings = {
-      dataUrl: "Build/8c1ed9ee306117383098d5ba833f5961.data.unityweb",
-      frameworkUrl: "Build/6ba41645ce5f30319a0d1a859044d93b.js.unityweb",
-      codeUrl: "Build/fc1630780ae54748c5f592a77f823d67.wasm.unityweb",
+    const buildUrl = "Build";
+    const loaderUrl = buildUrl + "/b8GP.loader.js";
+    const config = {
+      dataUrl: buildUrl + "/4e8682e3c9cafdc48c97083a66b5ac59.data.unityweb",
+      frameworkUrl: buildUrl + "/05b45aec41fe88bfeca5909f9fcb3e57.js.unityweb",
+      codeUrl: buildUrl + "/befda488217292f402be869948ba7214.wasm.unityweb",
       streamingAssetsUrl: "StreamingAssets",
       companyName: "DefaultCompany",
       productName: "MonsterEvolution",
       productVersion: "0.1",
-      matchWebGLToCanvasSize: true,
-      // devicePixelRatio: 2, // Uncomment this line to enable anti-aliasing
     };
 
-    const progressBar = document.querySelector("#progress-bar");
+    const container = document.querySelector("#unity-container");
+    const canvas = document.querySelector("#unity-canvas");
+    const loadingCover = document.querySelector("#loading-cover");
+    const progressBarEmpty = document.querySelector("#unity-progress-bar-empty");
+    const progressBarFull = document.querySelector("#unity-progress-bar-full");
+    const spinner = document.querySelector('.spinner');
 
-    const unityStartLoadingTime = performance.now();
-    let unityEndLoadingTime = 0;
-    setTimeout(() => {
-      createUnityInstance(document.querySelector("#unity-canvas"), settings, (progress) => {
-        progressBar.style.right = 100 * (1 - progress) + "%";
+    if (overlayBackgroundColor !== "-" && overlayBackgroundColor !== " " && overlayBackgroundColor !== "")
+      canvas.style.background = overlayBackgroundColor;
+
+    if (progressBarFillColor !== "-" && progressBarFillColor !== " " && progressBarFillColor !== "")
+      progressBarFull.style.background = progressBarFillColor;
+
+    if (progressBarBackgroundColor !== "-" && progressBarBackgroundColor !== " " && progressBarBackgroundColor !== "")
+      progressBarEmpty.style.background = progressBarBackgroundColor;
+
+    if (progressBarBorderColor !== "-" && progressBarBorderColor !== " " && progressBarBorderColor !== "")
+      progressBarEmpty.style.border.color = progressBarBorderColor;
+
+
+    if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+      container.className = "unity-mobile";
+    }
+
+    loadingCover.style.display = "";
+
+    const unityLoader = document.createElement("script");
+    unityLoader.src = loaderUrl;
+    unityLoader.onload = async () => {
+      //await _gpAwaiter.ready;
+      createUnityInstance(canvas, config, (progress) => {
+        spinner.style.display = "none";
+        progressBarEmpty.style.display = "";
+        progressBarFull.style.width = `${100 * progress}%`;
       }).then((unityInstance) => {
-        progressBar.style.display = "none";
-        unityEndLoadingTime = performance.now();
-        unityInstance.Module.errorHandler = (errorMessage) => {
-          const unityCrashTime = performance.now();
-          const unityCrashPlaytime = unityEndLoadingTime === 0 ? 0 : (unityCrashTime - unityEndLoadingTime) / 1000;
-          ym(window.yandexMetricaCounterId, 'reachGoal', 'unityGameCrash', { unityCrashPlaytime: unityCrashPlaytime });
-        };
-        ym(window.yandexMetricaCounterId,'reachGoal','unityStart', { unityLoadTime: (unityEndLoadingTime - unityStartLoadingTime) / 1000 });
-      }).catch((errorMessage) => {
-        ym(window.yandexMetricaCounterId, 'reachGoal', 'unityLoadingCrash');
-        alert(errorMessage);
+        window.unityInstance = unityInstance;
+        //_unityAwaiter.done(unityInstance);
+        loadingCover.style.display = "none";
+      }).catch((message) => {
+        //_unityAwaiter.abort(message);
+        alert(message);
       });
-    }, 500); // Wait half a second before loading. Makes page more responsive on reload.
+    };
+    document.body.appendChild(unityLoader);
+
+    document.addEventListener("pointerdown", () => {
+      container.focus();
+      window.focus();
+      canvas.focus();
+    });
+
   </script>
 </body>
 
