@@ -1,101 +1,27 @@
 <!DOCTYPE html>
 <html lang="en-us">
-
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>MonsterEvolution</title>
-  <link rel="stylesheet" href="TemplateData/style.css">
-
-  <script>
-    const overlayBackgroundColor = "";
-    const progressBarFillColor = "";
-    const progressBarBackgroundColor = "";
-    const progressBarBorderColor = "";
-  </script>
-
-</head>
-
-<body class="dark">
-  <div id="unity-container" class="unity-desktop">
-    <canvas id="unity-canvas"></canvas>
-  </div>
-  <div id="loading-cover" style="display:none;">
-    <div id="unity-loading-bar">
-      <div id="unity-logo"><img src="logo.png"></div>
-      <div id="unity-progress-bar-empty" style="display: none;">
-        <div id="unity-progress-bar-full"></div>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>MonsterEvolution</title>
+    <link rel="shortcut icon" href="TemplateData/favicon.ico">
+    <link rel="stylesheet" href="TemplateData/style.css">
+    <link rel="manifest" href="manifest.webmanifest">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://unpkg.com/@tonconnect/ui@2.0.9/dist/tonconnect-ui.min.js"></script>
+    <script src="https://unpkg.com/tonweb@0.0.66/dist/tonweb.js"></script>
+  </head>
+  <body>
+    <div id="unity-container">
+      <canvas id="unity-canvas" width=960 height=600 tabindex="-1"></canvas>
+      <div id="unity-loading-bar">
+        <div id="unity-logo"></div>
+        <div id="unity-progress-bar-empty">
+          <div id="unity-progress-bar-full"></div>
+        </div>
       </div>
-      <div class="spinner"></div>
+      <div id="unity-warning"> </div>
     </div>
-  </div>
-
-  <script>
-    const buildUrl = "Build";
-    const loaderUrl = buildUrl + "/b25.loader.js";
-    const config = {
-      dataUrl: buildUrl + "/97814b6655c00e574b550be40103fe48.data.unityweb",
-      frameworkUrl: buildUrl + "/83c8747e3e4d7af1e7de85b472627919.js.unityweb",
-      codeUrl: buildUrl + "/271c8f6b91e1344be612efd665b33b51.wasm.unityweb",
-      streamingAssetsUrl: "StreamingAssets",
-      companyName: "DefaultCompany",
-      productName: "MonsterEvolution",
-      productVersion: "0.1",
-    };
-
-    const container = document.querySelector("#unity-container");
-    const canvas = document.querySelector("#unity-canvas");
-    const loadingCover = document.querySelector("#loading-cover");
-    const progressBarEmpty = document.querySelector("#unity-progress-bar-empty");
-    const progressBarFull = document.querySelector("#unity-progress-bar-full");
-    const spinner = document.querySelector('.spinner');
-
-    if (overlayBackgroundColor !== "-" && overlayBackgroundColor !== " " && overlayBackgroundColor !== "")
-      canvas.style.background = overlayBackgroundColor;
-
-    if (progressBarFillColor !== "-" && progressBarFillColor !== " " && progressBarFillColor !== "")
-      progressBarFull.style.background = progressBarFillColor;
-
-    if (progressBarBackgroundColor !== "-" && progressBarBackgroundColor !== " " && progressBarBackgroundColor !== "")
-      progressBarEmpty.style.background = progressBarBackgroundColor;
-
-    if (progressBarBorderColor !== "-" && progressBarBorderColor !== " " && progressBarBorderColor !== "")
-      progressBarEmpty.style.border.color = progressBarBorderColor;
-
-
-    if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-      container.className = "unity-mobile";
-    }
-
-    loadingCover.style.display = "";
-
-    const unityLoader = document.createElement("script");
-    unityLoader.src = loaderUrl;
-    unityLoader.onload = async () => {
-      //await _gpAwaiter.ready;
-      createUnityInstance(canvas, config, (progress) => {
-        spinner.style.display = "none";
-        progressBarEmpty.style.display = "";
-        progressBarFull.style.width = `${100 * progress}%`;
-      }).then((unityInstance) => {
-        window.unityInstance = unityInstance;
-        //_unityAwaiter.done(unityInstance);
-        loadingCover.style.display = "none";
-      }).catch((message) => {
-        //_unityAwaiter.abort(message);
-        alert(message);
-      });
-    };
-    document.body.appendChild(unityLoader);
-
-    document.addEventListener("pointerdown", () => {
-      container.focus();
-      window.focus();
-      canvas.focus();
-    });
-
-  </script>
-</body>
-
+    <script src="index.js"></script>
+  </body>
 </html>
