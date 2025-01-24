@@ -55,9 +55,9 @@ window.addEventListener("load", function ()
   var buildUrl = "Build";
   var loaderUrl = buildUrl + "/1Uniton.loader.js";
   var config = {
-    dataUrl: buildUrl + "/973d9cd1203d108705c22076f26a66e3.data.unityweb",
+    dataUrl: buildUrl + "/df0f458d9e649db207ae0818bdb639e7.data.unityweb",
     frameworkUrl: buildUrl + "/1a82e1821920db48fd6283735e18048a.js.unityweb",
-    codeUrl: buildUrl + "/7ef997f4e59c165dbb4f5459b67b7841.wasm.unityweb",
+    codeUrl: buildUrl + "/5acbc263eb393a9082e5a55090420434.wasm.unityweb",
     streamingAssetsUrl: "StreamingAssets",
     companyName: "DefaultCompany",
     productName: "MonsterEvolution",
