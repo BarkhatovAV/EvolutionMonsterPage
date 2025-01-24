@@ -55,7 +55,7 @@ window.addEventListener("load", function ()
   var buildUrl = "Build";
   var loaderUrl = buildUrl + "/1Uniton.loader.js";
   var config = {
-    dataUrl: buildUrl + "/df0f458d9e649db207ae0818bdb639e7.data.unityweb",
+    dataUrl: buildUrl + "/64284144e843b1b92e691864df173d68.data.unityweb",
     frameworkUrl: buildUrl + "/1a82e1821920db48fd6283735e18048a.js.unityweb",
     codeUrl: buildUrl + "/5acbc263eb393a9082e5a55090420434.wasm.unityweb",
     streamingAssetsUrl: "StreamingAssets",
